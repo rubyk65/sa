@@ -1,0 +1,33 @@
+import yfinance as yf
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def calculate_mad_index(start_date, end_date):
+    currencies = ['EUR', 'USD', 'GBP', 'JPY']  # Example currency basket, you can modify it as needed
+    weights = [0.4, 0.3, 0.2, 0.1]  # Example weights, adjust them according to your preferences
+
+    data = yf.download(currencies, start=start_date, end=end_date)['Adj Close']
+
+    # Normalize data
+    normalized_data = data.div(data.iloc[0])
+
+    # Calculate weighted average
+    weighted_average = normalized_data.mul(weights).sum(axis=1)
+
+    return weighted_average
+
+# Specify the date range for the calculation
+start_date = '2022-01-01'
+end_date = '2022-12-31'
+
+# Calculate the MAD index
+mad_index = calculate_mad_index(start_date, end_date)
+
+# Plot the MAD index
+plt.figure(figsize=(10, 5))
+mad_index.plot()
+plt.title('Moroccan Dirham (MAD) Index')
+plt.xlabel('Date')
+plt.ylabel('Index Value')
+plt.grid(True)
+plt.show()
